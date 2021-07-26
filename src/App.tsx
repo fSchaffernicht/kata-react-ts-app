@@ -1,26 +1,42 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useReducer, useEffect } from "react"
+
+import reducer, { initialState } from "./reducer"
 
 function App() {
+  const [{ data, error, isLoading }, dispatch] = useReducer(
+    reducer,
+    initialState
+  )
+
+  async function getData() {
+    try {
+      dispatch({ type: "fetch-data" })
+
+      const response = await fetch("https://api.chucknorris.io/jokes/random")
+      const result = await response.json()
+
+      dispatch({ type: "fetch-data-success", payload: result })
+    } catch (error) {
+      dispatch({ type: "fetch-data-fail", payload: error })
+    }
+  }
+
+  useEffect(() => {
+    getData()
+  }, [])
+
+  function handleClick() {
+    getData()
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      {error && <div>{error}</div>}
+      {isLoading && <div>loading...</div>}
+      {data && <blockquote>{data.value}</blockquote>}
+      <button onClick={handleClick}>get more</button>
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
