@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react"
 
 interface FetchState {
-  data: { value?: string }
+  data: any
   error: string
   isLoading: boolean
 }
@@ -18,11 +18,11 @@ export default function useFetchData({ url, initOnMount = true }: FetchProps) {
     isLoading: false,
   })
 
-  const fetchData = useCallback(async () => {
+  const fetchData = useCallback(async (newUrl?: string) => {
     try {
       setState((prevState) => ({ ...prevState, isLoading: true, error: "" }))
 
-      const response = await fetch(url)
+      const response = await fetch(newUrl ?? url)
       const result = await response.json()
 
       setState({ data: result, error: "", isLoading: false })
