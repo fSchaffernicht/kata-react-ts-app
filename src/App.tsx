@@ -17,9 +17,8 @@ function App() {
 
   return (
     <div>
-      <Loader />
+      <Loader isLoading={isLoading} />
       {error && <div>{error}</div>}
-      {isLoading && <div>loading...</div>}
       {data && <blockquote>{data?.value}</blockquote>}
       <button onClick={() => refetch()}>get Jokes</button>
       <hr />
