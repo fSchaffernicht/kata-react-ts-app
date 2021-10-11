@@ -7,14 +7,6 @@ describe('Should render', () => {
     expect(container.firstChild).toBeInTheDocument()
   })
 
-  test('Button as anchor', () => {
-    const { debug } = render(<Button as="a">Link</Button>)
-    debug()
-    const link = screen.getByText('Link')
-
-    expect(link).toBeInTheDocument()
-  })
-
   test('with text "My Button"', () => {
     render(<Button>My Button</Button>)
     const customText = screen.getByText('My Button')
