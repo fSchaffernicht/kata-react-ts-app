@@ -13,9 +13,7 @@ interface Configuration {
   cellRenderer?: (value?: string | number) => void
 }
 
-interface Data {
-  [key: string]: any
-}
+type Data = Record<string, any>
 
 interface TableProps {
   configuration: Configuration[]
