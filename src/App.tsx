@@ -1,6 +1,6 @@
 import useFetchData from './useFetchData'
 
-import { Loader } from './components'
+import { Loader, Button } from './components'
 
 const API = 'https://api.chucknorris.io/jokes'
 
@@ -20,17 +20,17 @@ function App() {
       <Loader isLoading={isLoading} />
       {error && <div>{error}</div>}
       {data && <blockquote>{data?.value}</blockquote>}
-      <button onClick={() => refetch()}>get Jokes</button>
+      <Button onClick={() => refetch()}>get Jokes</Button>
       <hr />
       <div>
         {categories.data &&
           categories.data.length > 0 &&
           categories.data.map((category: string) => (
-            <button
+            <Button
               onClick={() => refetch(`${API}/random?category=${category}`)}
             >
               {category}
-            </button>
+            </Button>
           ))}
       </div>
     </div>
