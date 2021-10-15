@@ -1,29 +1,27 @@
-import React from 'react'
+import { ReactNode } from "react";
 
-// What the table needs
-// sorting
-// custom column styling
-// custom group heading
-// custom cell rendering
+import "./table.css";
 
+type CellValue = string | number;
 interface Configuration {
-  field: string
-  size?: number | string
-  title?: string
-  cellRenderer?: (value?: string | number) => void
+  field: string;
+  size?: number | string;
+  title?: string;
+  cellRenderer?: (value: CellValue) => ReactNode;
+  getCellClass?: (value: CellValue) => string;
 }
 
-type Data = Record<string, any>
+type Data = Record<string, any>;
 
 interface TableProps {
-  configuration: Configuration[]
-  data: Data[]
+  configuration: Configuration[];
+  data: Data[];
 }
 
 export default function Table(props: TableProps) {
-  const { configuration, data } = props
+  const { configuration, data } = props;
   return (
-    <div>
+    <div className="table">
       {configuration.map((column, columnIndex) => {
         return (
           <div key={columnIndex}>
@@ -31,14 +29,33 @@ export default function Table(props: TableProps) {
             <div>
               {data.map((row, rowIndex) => {
                 if (row[column.field]) {
-                  return <div key={rowIndex}>{row[column.field]}</div>
+                  if (column.cellRenderer instanceof Function) {
+                    return (
+                      <div
+                        key={rowIndex}
+                        className={
+                          column.getCellClass instanceof Function
+                            ? column.getCellClass(row[column.field])
+                            : ""
+                        }
+                      >
+                        {column.cellRenderer(row[column.field])}
+                      </div>
+                    );
+                  } else {
+                    return (
+                      <div className="table__cell" key={rowIndex}>
+                        {row[column.field]}
+                      </div>
+                    );
+                  }
                 }
-                return null
+                return <div className="table__cell" />;
               })}
             </div>
           </div>
-        )
+        );
       })}
     </div>
-  )
+  );
 }

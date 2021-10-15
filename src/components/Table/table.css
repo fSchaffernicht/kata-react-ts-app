@@ -1,0 +1,7 @@
+.table {
+  display: flex;
+}
+
+.table__cell {
+  padding: 1rem;
+}
