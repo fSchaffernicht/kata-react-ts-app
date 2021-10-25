@@ -20,6 +20,30 @@ interface TableProps {
   data: Data[];
 }
 
+function getTableData(column: Configuration) {
+  return function (row: Data, rowIndex: number) {
+    if (row[column.field]) {
+      if (column.cellRenderer instanceof Function) {
+        return (
+          <Cell
+            className={
+              column.getCellClass instanceof Function
+                ? column.getCellClass(row[column.field])
+                : ""
+            }
+            key={rowIndex}
+          >
+            {column.cellRenderer(row[column.field])}
+          </Cell>
+        );
+      } else {
+        return <Cell>{row[column.field]}</Cell>;
+      }
+    }
+    return <div className="table__cell" />;
+  };
+}
+
 export default function Table(props: TableProps) {
   const { configuration, data } = props;
   return (
@@ -28,29 +52,7 @@ export default function Table(props: TableProps) {
         return (
           <div key={columnIndex}>
             column {column.field}
-            <div>
-              {data.map((row, rowIndex) => {
-                if (row[column.field]) {
-                  if (column.cellRenderer instanceof Function) {
-                    return (
-                      <Cell
-                        className={
-                          column.getCellClass instanceof Function
-                            ? column.getCellClass(row[column.field])
-                            : ""
-                        }
-                        key={rowIndex}
-                      >
-                        {column.cellRenderer(row[column.field])}
-                      </Cell>
-                    );
-                  } else {
-                    return <Cell>{row[column.field]}</Cell>;
-                  }
-                }
-                return <div className="table__cell" />;
-              })}
-            </div>
+            <div>{data.map(getTableData(column))}</div>
           </div>
         );
       })}
