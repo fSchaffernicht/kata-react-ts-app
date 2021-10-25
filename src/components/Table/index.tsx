@@ -2,6 +2,8 @@ import { ReactNode } from "react";
 
 import "./table.css";
 
+import Cell from "./Cell";
+
 type CellValue = string | number;
 interface Configuration {
   field: string;
@@ -31,23 +33,19 @@ export default function Table(props: TableProps) {
                 if (row[column.field]) {
                   if (column.cellRenderer instanceof Function) {
                     return (
-                      <div
-                        key={rowIndex}
+                      <Cell
                         className={
                           column.getCellClass instanceof Function
                             ? column.getCellClass(row[column.field])
                             : ""
                         }
+                        key={rowIndex}
                       >
                         {column.cellRenderer(row[column.field])}
-                      </div>
+                      </Cell>
                     );
                   } else {
-                    return (
-                      <div className="table__cell" key={rowIndex}>
-                        {row[column.field]}
-                      </div>
-                    );
+                    return <Cell>{row[column.field]}</Cell>;
                   }
                 }
                 return <div className="table__cell" />;
