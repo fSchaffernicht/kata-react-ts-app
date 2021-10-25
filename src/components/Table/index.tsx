@@ -20,6 +20,8 @@ interface TableProps {
   data: Data[];
 }
 
+// TODO: Build a real html table and think about configuration e.g. table headers?
+
 export default function Table(props: TableProps) {
   const { configuration, data } = props;
   return (
